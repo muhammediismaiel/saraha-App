@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { SYS_Gender, SYS_Role } from "../../../src/SYS_Var/index.js";
+import { SYS_Gender, SYS_Role } from "../../../common/index.js";
 const schema = new Schema(
   {
     userName: {
@@ -41,4 +41,4 @@ const schema = new Schema(
   },
   { timestamps: true },
 );
-const user = model("User", schema);
+export const User = model("User", schema);
