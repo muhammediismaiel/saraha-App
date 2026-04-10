@@ -24,12 +24,12 @@ const schema = new Schema(
     },
     gender: {
       type: Number,
-      enum: object.values(SYS_Gender),
+      enum: Object.values(SYS_Gender),
       default: SYS_Gender.male,
     },
     role: {
       type: Number,
-      enum: object.values(SYS_Role),
+      enum: Object.values(SYS_Role),
       default: SYS_Role.user,
     },
     phoneNumber: {

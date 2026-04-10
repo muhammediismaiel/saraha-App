@@ -1,4 +1,4 @@
-class DBRepository {
+export class DBRepository {
   nModel;
   constructor(model) {
     this.nModel = model;

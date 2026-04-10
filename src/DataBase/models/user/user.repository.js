@@ -1,4 +1,4 @@
-import DBRepository from "../../d.repository.js";
+import { DBRepository } from "../../d.repository.js";
 import { User } from "./user.model.js";
 class UserRepository extends DBRepository {
   constructor() {
@@ -6,4 +6,4 @@ class UserRepository extends DBRepository {
   }
 }
 
-export const UserRepository = new UserRepository();
+export const Userrepository = new UserRepository();

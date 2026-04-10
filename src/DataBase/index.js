@@ -1,2 +1,3 @@
 import { connectDb } from "./connection.js";
-export { connectDb };
+import { Userrepository } from "./models/user/user.repository.js";
+export { connectDb, Userrepository };
