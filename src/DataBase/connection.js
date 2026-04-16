@@ -5,7 +5,7 @@ export function connectDb() {
     .then(() => {
       console.log("dataBase connected Succsefully");
     })
-    .catch(() => {
-      console.log("dataBase connected Succsefully");
+    .catch((err) => {
+      console.log("dataBase connection failed:", err.message);
     });
 }

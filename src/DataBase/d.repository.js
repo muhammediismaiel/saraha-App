@@ -16,5 +16,7 @@ export class DBRepository {
   async getAll(filter, projection = {}, options = {}) {
     return await this.nModel.find(filter, projection, options);
   }
-  delete() {}
+  async delete(filter) {
+    return await this.nModel.findOneAndDelete(filter);
+  }
 }
