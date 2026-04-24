@@ -9,7 +9,6 @@ import { isAuth } from "../../middleware/authmiddleware.js";
 
 const router = Router();
 
-// ─── GET /user/:id ───────────────────────────────────────────────────────────
 router.get("/:id", isAuth, async (req, res, next) => {
   try {
     const { user } = req;
@@ -23,7 +22,7 @@ router.get("/:id", isAuth, async (req, res, next) => {
   }
 });
 
-// ─── DELETE /user/:id  (protected) ───────────────────────────────────────────
+
 router.delete("/:id", isAuth, async (req, res, next) => {
   try {
     if (String(req.user._id) !== req.params.id)
