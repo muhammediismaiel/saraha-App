@@ -6,6 +6,7 @@ import {
 } from "../../common/utils/error.utils.js";
 import { decryption } from "../../common/utils/cryptography.utils.js";
 import { isAuth } from "../../middleware/authmiddleware.js";
+import { fileUpload } from "../../common/utils/multer.util.js";
 
 const router = Router();
 
@@ -22,7 +23,13 @@ router.get("/:id", isAuth, async (req, res, next) => {
   }
 });
 
-
+router.patch(
+  "/upload-profile-pic",
+  fileUpload().single("pp"),
+  async (req, res, next) => {
+    return res.json({ message: "uploaded" });
+  },
+);
 router.delete("/:id", isAuth, async (req, res, next) => {
   try {
     if (String(req.user._id) !== req.params.id)
@@ -38,4 +45,3 @@ router.delete("/:id", isAuth, async (req, res, next) => {
 });
 
 export const userRouter = router;
-

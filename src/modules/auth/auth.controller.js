@@ -8,10 +8,11 @@ import {
 import bcrypt from "bcrypt";
 import { encryption } from "../../common/utils/cryptography.utils.js";
 import { generateToken } from "../../common/utils/jwt.utils.js";
+import { fileUpload } from "../../common/utils/multer.util.js";
 
 const router = Router();
 
-router.post("/signup", async (req, res, next) => {
+router.post("/signup", fileUpload().none(), async (req, res, next) => {
   try {
     const { email, phoneNumber, password } = req.body;
 
@@ -38,7 +39,6 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-
 router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -51,9 +51,7 @@ router.post("/login", async (req, res, next) => {
     const match = await bcrypt.compare(password, userExist.password);
     if (!match) throw new BadRequestException("Invalid credentials");
 
-    const token = generateToken(
-      { _id: userExist._id, role: userExist.role },
-    );
+    const token = generateToken({ _id: userExist._id, role: userExist.role });
 
     return res.status(200).json({
       message: "Logged in successfully",
@@ -66,4 +64,3 @@ router.post("/login", async (req, res, next) => {
 });
 
 export const authRouter = router;
-
