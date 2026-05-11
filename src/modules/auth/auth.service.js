@@ -1,10 +1,11 @@
 import {BadRequestException, NotFoundtException} from "../../common/utils/error.utils.js";
 import {checkUserExist} from "../user/user.services.js";
 import {generateToken} from "../../common/index.js";
-import {otpRepository} from "../otp/otp.repsitory.js";
+import {otpRepository} from "../../DataBase/models/otp/otp.repsitory.js";
 import {sendEmail} from "../../common/utils/emai.util.js";
 import {verify} from "jsonwebtoken";
 import {Userrepository} from "../../DataBase/index.js";
+import {tokenRepository} from "../../DataBase/models/token/token.repository.js";
 
 export const login = async (body) => {
         const { email, password } = body;
@@ -67,5 +68,10 @@ export const logoutFromAllDevices = async (body) => {
     userExist.tokens = userExist.tokens.filter((token) => token.token !== body.token);
     await userExist.save();
     return true;
-    
+
 };
+export const logout = async (tokenPayload , user) => {
+    await  tokenRepository.creat({token:tokenPayload.
+            token,userId:tokenPayload._id
+    ,expireAt:tokenPayload.expireAt*1000});
+}

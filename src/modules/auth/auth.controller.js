@@ -9,8 +9,9 @@ import bcrypt from "bcrypt";
 import { encryption } from "../../common/utils/cryptography.utils.js";
 import { generateToken } from "../../common/utils/jwt.utils.js";
 import { fileUpload } from "../../common/utils/multer.util.js";
-import {login, logoutFromAllDevices, signup, verifyOtp} from "./auth.service.js";
+import {login, logout, logoutFromAllDevices, signup, verifyOtp} from "./auth.service.js";
 import jwt from "jsonwebtoken";
+import {tokenRepository} from "../../DataBase/models/token/token.repository.js";
 
 const router = Router();
 
@@ -47,5 +48,15 @@ router.post("/logout-from-all-devices", async (req, res, next) => {
   await logoutFromAllDevices(req.body)
   return res.status(200).json({message:"Logged out successfully",success:true});
 
+})
+router.post("/logout", async (req, res, next) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) throw new BadRequestException("Refresh token is required");
+  const decodedToken = await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  if (!decodedToken) throw new BadRequestException("Invalid refresh token");
+  await logout(req.user , decodedToken.id)
+  const tokenexist = tokenRepository.getOne({token:refreshToken});
+  if (tokenexist) await tokenRepository.delete({_id:tokenexist._id});
+  return res.status(200).json({message:"Logged out successfully",success:true});
 })
 export const authRouter = router;
