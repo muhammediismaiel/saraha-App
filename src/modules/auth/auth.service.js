@@ -1,0 +1,38 @@
+import {BadRequestException, NotFoundtException} from "../../common/utils/error.utils.js";
+import {checkUserExist} from "../user/user.services.js";
+import {generateToken} from "../../common/index.js";
+import {otpRepository} from "../otp/otp.repsitory.js";
+
+export const login = async (body) => {
+        const { email, password } = body;
+
+        const userExist = await checkUserExist({
+            email: { $eq: email, $exists: true, $ne: null },
+        });
+        if (!userExist) throw new NotFoundtException("User not found");
+
+        const match = await bcrypt.compare(password, userExist.password);
+        if (!match) throw new BadRequestException("Invalid credentials");
+
+        const token = generateToken({ _id: userExist._id, role: userExist.role });
+
+};
+
+
+export const signup = async (body) => {
+        const { email, phoneNumber, password } = body;
+
+        const userExist = await checkUserExist({
+            $or: [
+                { email: { $eq: email, $exists: true, $ne: null } },
+                { phoneNumber: { $eq: phoneNumber, $exists: true, $ne: null } },
+            ],
+        });
+        if (userExist) throw new conflictException("User already exists");
+
+        body.password = await bcrypt.hash(password, 10);
+        if (phoneNumber) body.phoneNumber = encryption(phoneNumber);
+        const otp = Math.floor(100000+Math.random()*900000) ;
+        otpRepository.creat({email:email,otp:otp,expireAt:Date.now()+1000*60*10});
+        const newUser = await creatUser(body);
+};

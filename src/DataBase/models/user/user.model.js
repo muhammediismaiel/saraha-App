@@ -38,6 +38,10 @@ const schema = new Schema(
       trim: true,
       maxlength: 11,
     },
+      isEmailVerified: {
+        type: Boolean,
+        default: false,
+      }
   },
   { timestamps: true },
 );

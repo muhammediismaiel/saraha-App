@@ -3,6 +3,8 @@ import "dotenv/config";
 import { connectDb } from "./DataBase/index.js";
 import { authRouter } from "./modules/auth/auth.controller.js";
 import { userRouter } from "./modules/user/user.controller.js";
+import { uploadRouter } from "./modules/upload/index.js";
+import { handleMulterError } from "./middleware/fileUploadError.middleware.js";
 
 const app = express();
 const port = 3000;
@@ -12,6 +14,10 @@ app.use(express.json());
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/upload", uploadRouter);
+
+// Handle multer errors before the general error handler
+app.use(handleMulterError);
 
 app.use((error, req, res, next) => {
   console.warn(error.message);
