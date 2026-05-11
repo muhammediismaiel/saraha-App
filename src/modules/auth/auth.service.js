@@ -60,3 +60,12 @@ export const resendOtp = async (body) => {
     otpRepository.creat({email:email,otp:otp,expireAt:Date.now()+1000*60*10});
     sendEmail(email ,"verify your email", "your otp is : " + otp + "" );
 }
+export const logoutFromAllDevices = async (body) => {
+    const {email} = body;
+    const userExist = await checkUserExist({email:email});
+    if (!userExist) throw new NotFoundtException("User not found");
+    userExist.tokens = userExist.tokens.filter((token) => token.token !== body.token);
+    await userExist.save();
+    return true;
+    
+};

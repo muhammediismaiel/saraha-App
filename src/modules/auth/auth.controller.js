@@ -9,7 +9,8 @@ import bcrypt from "bcrypt";
 import { encryption } from "../../common/utils/cryptography.utils.js";
 import { generateToken } from "../../common/utils/jwt.utils.js";
 import { fileUpload } from "../../common/utils/multer.util.js";
-import {login, signup, verifyOtp} from "./auth.service.js";
+import {login, logoutFromAllDevices, signup, verifyOtp} from "./auth.service.js";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -37,5 +38,14 @@ router.patch("/refresh-token", async (req, res, next) => {
 router.patch("/verify-email", async (req, res, next) => {
 const verifiedDeatils = await verifyOtp(req.body);
 res.status(200).json({message:"email verified",success:true});
+})
+router.post("/logout-from-all-devices", async (req, res, next) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) throw new BadRequestException("Refresh token is required");
+  const decodedToken = await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  if (!decodedToken) throw new BadRequestException("Invalid refresh token");
+  await logoutFromAllDevices(req.body)
+  return res.status(200).json({message:"Logged out successfully",success:true});
+
 })
 export const authRouter = router;
