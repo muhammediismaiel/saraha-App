@@ -1,5 +1,5 @@
 import express from 'express';
-import { validateFile, getFileType } from '../../common/fileValidation.utils.js';
+import { validateFile, getFileType } from '../../common/utils/fileValidation.utils.js';
 import fs from 'fs';
 import path from 'path';
 

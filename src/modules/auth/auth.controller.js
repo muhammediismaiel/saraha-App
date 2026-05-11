@@ -9,7 +9,7 @@ import bcrypt from "bcrypt";
 import { encryption } from "../../common/utils/cryptography.utils.js";
 import { generateToken } from "../../common/utils/jwt.utils.js";
 import { fileUpload } from "../../common/utils/multer.util.js";
-import {login, signup} from "./auth.service.js";
+import {login, signup, verifyOtp} from "./auth.service.js";
 
 const router = Router();
 
@@ -21,14 +21,21 @@ const createdUser = await signup(req.body);
       data: { user: newUser },
     });
 });
-
 router.post("/login", async (req, res, next) => {
-  await login(req.body);
+ const {accessToken, refreshToken}= await login(req.body);
   return res.status(200).json({
     message: "Logged in successfully",
     success: true,
     data: { token },
   });
 });
+router.patch("/refresh-token", async (req, res, next) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) throw new BadRequestException("Refresh token is required");
 
+})
+router.patch("/verify-email", async (req, res, next) => {
+const verifiedDeatils = await verifyOtp(req.body);
+res.status(200).json({message:"email verified",success:true});
+})
 export const authRouter = router;

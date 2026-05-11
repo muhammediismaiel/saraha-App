@@ -101,7 +101,7 @@ export const validateFileSize = (maxSize = 10 * 1024 * 1024) => {
 // File type validation middleware
 export const validateFileType = (allowedTypes = ['images', 'documents']) => {
   return (req, res, next) => {
-    const { validateFile } = require('../common/fileValidation.utils.js');
+    const { validateFile } = require('../common/utils/fileValidation.utils.js');
     
     if (req.file) {
       const validation = validateFile(req.file, allowedTypes);
